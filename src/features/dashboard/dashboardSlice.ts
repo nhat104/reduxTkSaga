@@ -39,13 +39,13 @@ const dashboardSlice = createSlice({
   name: 'dashboard',
   initialState,
   reducers: {
-    fetchDashboardData(state) {
+    fetchData(state) {
       state.loading = true;
     },
-    fetchDashboardDataSuccess(state) {
+    fetchDataSuccess(state) {
       state.loading = false;
     },
-    fetchDashboardDataFailed(state) {
+    fetchDataFailed(state) {
       state.loading = false;
     },
 
@@ -65,15 +65,7 @@ const dashboardSlice = createSlice({
 });
 
 // Actions
-export const {
-  fetchDashboardData,
-  fetchDashboardDataSuccess,
-  fetchDashboardDataFailed,
-  setStatistics,
-  setHighestStudentList,
-  setLowestStudentList,
-  setRankingByCityList,
-} = dashboardSlice.actions;
+export const dashboardActions = dashboardSlice.actions;
 
 // Selectors
 export const selectDashboardLoading = (state: RootState) =>
