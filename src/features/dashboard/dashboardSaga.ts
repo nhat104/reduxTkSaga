@@ -1,5 +1,4 @@
-import { all, call, put, takeLatest } from '@redux-saga/core/effects';
-
+import { put, call, all, takeLatest } from '@redux-saga/core/effects';
 import studentApi from 'api/studentApi';
 import cityApi from 'api/cityApi';
 import { City, ListResponse, Student } from 'models';
@@ -10,7 +9,7 @@ function* fetchStatistics() {
     call(studentApi.getAll, { _page: 1, _limit: 1, gender: 'male' }),
     call(studentApi.getAll, { _page: 1, _limit: 1, gender: 'female' }),
     call(studentApi.getAll, { _page: 1, _limit: 1, mark_gte: 8 }),
-    call(studentApi.getAll, { _page: 1, _limit: 1, mark_lte: 8 }),
+    call(studentApi.getAll, { _page: 1, _limit: 1, mark_lte: 5 }),
   ]);
 
   const statisticsList = responseList.map((x) => x.pagination._totalRows);
@@ -51,7 +50,7 @@ function* fetchRankingByCity() {
   // fetch city list
   const { data: cityList }: ListResponse<City> = yield call(cityApi.getAll);
 
-  // fetch ranking by city
+  // fetch ranking per city
   const callList = cityList.map((x) =>
     call(studentApi.getAll, {
       _page: 1,
@@ -63,9 +62,11 @@ function* fetchRankingByCity() {
   );
 
   const responseList: Array<ListResponse<Student>> = yield all(callList);
+
   const rankingByCityList: Array<RankingByCity> = responseList.map(
     (x, idx) => ({
       cityId: cityList[idx].code,
+      cityName: cityList[idx].name,
       rankingList: x.data,
     })
   );
@@ -82,8 +83,11 @@ function* fetchDashboardData() {
       call(fetchLowestStudentList),
       call(fetchRankingByCity),
     ]);
+
+    yield put(dashboardActions.fetchDataSuccess());
   } catch (error) {
     console.log('Failed to fetch dashboard data', error);
+    yield put(dashboardActions.fetchDataFailed());
   }
 }
 
