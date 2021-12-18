@@ -73,7 +73,7 @@ export default function Dashboard() {
         <Grid item xs={12} md={6} lg={3} xl={3}>
           <StatisticsItem
             icon={<ChatBubble fontSize="large" color="primary" />}
-            label="make >= 8"
+            label="mark >= 8"
             value={statistics.highMarkCount}
           />
         </Grid>
@@ -81,7 +81,7 @@ export default function Dashboard() {
         <Grid item xs={12} md={6} lg={3} xl={3}>
           <StatisticsItem
             icon={<LinearScaleSharp fontSize="large" color="primary" />}
-            label="make <= 5"
+            label="mark <= 5"
             value={statistics.lowMarkCount}
           />
         </Grid>

@@ -45,7 +45,7 @@ export function AdminLayout() {
       <Box className={classes.main}>
         <Routes>
           <Route path="dashboard" element={<Dashboard />} />
-          <Route path="students" element={<Student />} />
+          <Route path="students/*" element={<Student />} />
         </Routes>
       </Box>
     </Box>
