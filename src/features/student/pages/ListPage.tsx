@@ -7,8 +7,10 @@ import {
 } from '@mui/material';
 import { makeStyles } from '@mui/styles';
 import { useAppDispatch, useAppSelector } from 'app/hooks';
-import { selectCityMap } from 'features/city/citySlice';
+import { selectCityList, selectCityMap } from 'features/city/citySlice';
+import { ListParams } from 'models';
 import React, { useEffect } from 'react';
+import StudentFilters from '../components/StudentFilters';
 import StudentTable from '../components/StudentTable';
 import {
   selectStudentFilter,
@@ -45,6 +47,7 @@ export default function ListPage() {
   const pagination = useAppSelector(selectStudentPagination);
   const filter = useAppSelector(selectStudentFilter);
   const loading = useAppSelector(selectStudentLoading);
+  const cityList = useAppSelector(selectCityList);
   const cityMap = useAppSelector(selectCityMap);
 
   const classes = useStyles();
@@ -55,21 +58,20 @@ export default function ListPage() {
 
   const handleChange = (event: any, page: number) => {
     dispatch(
-      studentActions.setFiler({
+      studentActions.setFilter({
         ...filter,
         _page: page,
       })
     );
   };
 
-  useEffect(() => {
-    dispatch(
-      studentActions.fetchStudentList({
-        _page: 1,
-        _limit: 15,
-      })
-    );
-  }, [dispatch]);
+  const handleSearchChange = (newFilter: ListParams) => {
+    dispatch(studentActions.setFilterWithDebounce(newFilter));
+  };
+
+  const handleFilterChange = (newFilter: ListParams) => {
+    dispatch(studentActions.setFilter(newFilter));
+  };
 
   return (
     <Box className={classes.root}>
@@ -79,6 +81,15 @@ export default function ListPage() {
         <Button variant="contained" color="primary">
           Add new student
         </Button>
+      </Box>
+
+      <Box mb={3}>
+        <StudentFilters
+          filter={filter}
+          cityList={cityList}
+          onChange={handleFilterChange}
+          onSearchChange={handleSearchChange}
+        />
       </Box>
 
       <StudentTable studentList={studentList} cityMap={cityMap} />
