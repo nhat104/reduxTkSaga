@@ -94,7 +94,7 @@ export default function ListPage() {
 
       <StudentTable studentList={studentList} cityMap={cityMap} />
 
-      <Box display="flex" justifyContent="center">
+      <Box mt={2} display="flex" justifyContent="center">
         <Pagination
           color="primary"
           count={Math.ceil(pagination._totalRows / pagination._limit)}
